@@ -11,7 +11,7 @@ const ROOT_PATH: &str = "/";
 
 /// This data structure represents either a file or a directory.
 /// It is returned from the endpoint as JSON.
-#[derive(Builder)]
+#[derive(Builder, Serialize)]
 #[builder(pattern = "owned")]
 pub struct EntryData {
     /// The filename. With trailing "/" if it is a directory.
@@ -21,6 +21,7 @@ pub struct EntryData {
     /// with which it can be accessed through the server.
     path:       String,
     /// If this entry is a file or a directory.
+    #[serde(rename = "type")]
     entry_type: EntryType,
     /// Vec of entry paths to this entry's child items.
     /// Is only Some if this is a directory, is None if it is a file.

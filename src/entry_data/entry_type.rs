@@ -8,6 +8,8 @@ use std::path::PathBuf;
 /// It can be converted into a `String` (`ToString`),
 /// which returns either an `"f"` or an `"d"`, depending
 /// on the type.
+#[derive(Clone, Serialize)]
+#[serde(into = "String")]
 pub enum EntryType {
     File,
     Directory,
@@ -42,5 +44,11 @@ impl fmt::Display for EntryType {
             EntryType::File => "f",
             EntryType::Directory => "d",
         })
+    }
+}
+
+impl Into<String> for EntryType {
+    fn into(self) -> String {
+        self.to_string()
     }
 }
