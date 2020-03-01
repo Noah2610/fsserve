@@ -1,5 +1,5 @@
 use crate::entry_data::{EntryData, EntryType};
-use crate::error::Error;
+use crate::error::{Error, Result, ServeError};
 use std::convert::TryFrom;
 use std::fs::{File, FileType};
 use std::io::Read;
@@ -20,29 +20,23 @@ impl Server {
         ServerBuilder::default()
     }
 
-    pub fn serve(self) -> Result<(), Error> {
-        let root_file_type = self.path.metadata()?.file_type();
+    pub fn serve(self) -> Result {
         let root_type = EntryType::try_from(&self.path)?;
-
-        if root_file_type.is_file() {
-            self.serve_file()
-        } else if root_file_type.is_dir() {
-            self.serve_directory()
-        } else {
-            unreachable!(
-                "PathBuf::metadata should follow symlinks, so the FileType \
-                 has to be either a file or a directory.
-                 Execution should never get to this point!"
-            )
+        match root_type {
+            EntryType::File => self.serve_file(),
+            EntryType::Directory => self.serve_directory(),
         }
     }
 
     // TODO
-    fn serve_file(self) -> Result<(), Error> {
-        unimplemented!()
+    fn serve_file(self) -> Result {
+        Err(ServeError::Unimplemented {
+            feature_desc: "serving a file".to_string(),
+        }
+        .into())
     }
 
-    fn serve_directory(self) -> Result<(), Error> {
+    fn serve_directory(self) -> Result {
         Ok(())
     }
 }

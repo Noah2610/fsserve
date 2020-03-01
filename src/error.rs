@@ -1,5 +1,3 @@
-use std::fmt;
-
 pub use failure::Error;
 
 pub type Result<T = ()> = std::result::Result<T, Error>;
@@ -13,4 +11,6 @@ pub enum ServeError {
         file_type
     )]
     InvalidFileType { file_type: String },
+    #[fail(display = "{} is not yet implemented, sorry!", feature_desc)]
+    Unimplemented { feature_desc: String },
 }
