@@ -8,7 +8,7 @@ use std::path::PathBuf;
 #[derive(Builder)]
 #[builder(pattern = "owned")]
 pub struct Server {
-    path:    PathBuf,
+    root:    PathBuf,
     #[builder(default)]
     options: ServerOptions,
 }
@@ -19,7 +19,8 @@ impl Server {
     }
 
     pub fn serve(self) -> Result {
-        let root_type = EntryType::try_from(&self.path)?;
+        let root_type = EntryType::try_from(&self.root)?;
+
         match root_type {
             EntryType::File => self.serve_file(),
             EntryType::Directory => self.serve_directory(),
@@ -35,12 +36,20 @@ impl Server {
     }
 
     fn serve_directory(self) -> Result {
-        let entry_data: EntryData = (&self.path).try_into()?;
+        let entry_data: EntryData = (&self.root).try_into()?;
         println!("{}", serde_json::ser::to_string_pretty(&entry_data)?);
         Ok(())
     }
 }
 
-// TODO
-#[derive(Default)]
-pub struct ServerOptions;
+#[derive(Default, Builder)]
+#[builder(pattern = "owned")]
+pub struct ServerOptions {
+    interfaces: Vec<&'static str>,
+}
+
+impl ServerOptions {
+    pub fn builder() -> ServerOptionsBuilder {
+        ServerOptionsBuilder::default()
+    }
+}
