@@ -1,5 +1,5 @@
 use crate::entry_data::{EntryData, EntryType};
-use crate::error::{Error, Result, ServeError};
+use crate::error::prelude::*;
 use std::convert::TryFrom;
 use std::fs::{File, FileType};
 use std::io::Read;
