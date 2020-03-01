@@ -1,0 +1,14 @@
+[package]
+name = "fsserve"
+description = "Serve a file system structure as JSON"
+version = "0.0.0"
+authors = ["Noah Rosenzweig <rosenzweig.noah@gmail.com>"]
+edition = "2018"
+
+[[bin]]
+name = "fsserve-cli"
+path = "cli/main.rs"
+
+[dependencies]
+derive_builder = "0.9.0"
+http = "0.2.0"
