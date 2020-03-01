@@ -5,5 +5,6 @@ extern crate failure;
 extern crate http;
 extern crate serde_json;
 
+pub mod entry_data;
 pub mod error;
 pub mod server;
