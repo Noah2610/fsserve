@@ -1,5 +1,6 @@
 use crate::entry_data::{EntryData, EntryType};
 use crate::error::Error;
+use std::convert::TryFrom;
 use std::fs::{File, FileType};
 use std::io::Read;
 use std::path::PathBuf;
@@ -21,6 +22,7 @@ impl Server {
 
     pub fn serve(self) -> Result<(), Error> {
         let root_file_type = self.path.metadata()?.file_type();
+        let root_type = EntryType::try_from(&self.path)?;
 
         if root_file_type.is_file() {
             self.serve_file()

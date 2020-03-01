@@ -2,7 +2,8 @@ use std::fmt;
 
 pub use failure::Error;
 
-pub type ServeResult<T = ()> = Result<T, ServeError>;
+pub type Result<T = ()> = std::result::Result<T, Error>;
+pub type ServeResult<T = ()> = std::result::Result<T, ServeError>;
 
 #[derive(Debug, Fail)]
 pub enum ServeError {

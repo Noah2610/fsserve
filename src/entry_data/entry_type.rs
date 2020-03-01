@@ -1,7 +1,8 @@
-use crate::error::{ServeError, ServeResult};
+use crate::error::{Error, Result, ServeError};
 use std::convert::TryFrom;
 use std::fmt;
 use std::fs::FileType;
+use std::path::PathBuf;
 
 /// An `EntryType` represents either a `File` or a `Directory`.
 /// It can be converted into a `String` (`ToString`),
@@ -13,9 +14,8 @@ pub enum EntryType {
 }
 
 impl TryFrom<FileType> for EntryType {
-    type Error = ServeError;
-
-    fn try_from(file_type: FileType) -> ServeResult<Self> {
+    type Error = Error;
+    fn try_from(file_type: FileType) -> Result<Self> {
         if file_type.is_file() {
             Ok(EntryType::File)
         } else if file_type.is_dir() {
@@ -23,8 +23,16 @@ impl TryFrom<FileType> for EntryType {
         } else {
             Err(ServeError::InvalidFileType {
                 file_type: format!("{:?}", file_type),
-            })
+            }
+            .into())
         }
+    }
+}
+
+impl TryFrom<&PathBuf> for EntryType {
+    type Error = Error;
+    fn try_from(path: &PathBuf) -> Result<Self> {
+        Self::try_from(path.metadata()?.file_type())
     }
 }
 
