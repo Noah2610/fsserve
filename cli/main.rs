@@ -5,6 +5,6 @@ use std::path::PathBuf;
 
 fn main() -> Result<(), String> {
     let path = PathBuf::from(".");
-    Server::builder().path(path).build()?.serve();
+    Server::builder().path(path).build()?.serve().unwrap();
     Ok(())
 }

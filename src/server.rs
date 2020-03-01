@@ -1,8 +1,6 @@
 use crate::entry_data::{EntryData, EntryType};
 use crate::error::prelude::*;
 use std::convert::{TryFrom, TryInto};
-use std::fs::{File, FileType};
-use std::io::Read;
 use std::path::PathBuf;
 
 /// Serves a directory or file (`path`), and holds
