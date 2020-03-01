@@ -2,13 +2,14 @@ use std::fmt;
 
 pub use failure::Error;
 
-pub type ServeResult<T = ()> = Result<T, Error>;
+pub type ServeResult<T = ()> = Result<T, ServeError>;
 
 #[derive(Debug, Fail)]
-pub enum ServeError {}
-
-impl fmt::Display for ServeError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{:#?}", self)
-    }
+pub enum ServeError {
+    #[fail(
+        display = "invalid file type for serving, can only be file or \
+                   directory: {}",
+        file_type
+    )]
+    InvalidFileType { file_type: String },
 }
