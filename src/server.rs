@@ -37,7 +37,7 @@ impl Server {
     }
 
     fn serve_directory(self) -> Result {
-        let serve_options = self.options;
+        let serve_options = self.options.clone();
 
         let server =
             HttpServer::new(move |request, response| -> ResponseResult {
@@ -69,7 +69,7 @@ impl Server {
                 }
             });
 
-        server.listen(serve_options.host, serve_options.port);
+        server.listen(serve_options.host.as_str(), serve_options.port.as_str());
     }
 }
 
@@ -106,18 +106,18 @@ fn response_internal_server_error(
         .body("500 Internal Server Error".as_bytes().to_vec())?)
 }
 
-#[derive(Clone, Copy, Builder)]
+#[derive(Clone, Builder)]
 #[builder(pattern = "owned")]
 pub struct ServerOptions {
-    host: &'static str,
-    port: &'static str,
+    host: String,
+    port: String,
 }
 
 impl Default for ServerOptions {
     fn default() -> Self {
         Self {
-            host: "localhost",
-            port: "8080",
+            host: "localhost".to_string(),
+            port: "8080".to_string(),
         }
     }
 }
