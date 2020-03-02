@@ -39,7 +39,7 @@ impl Server {
     fn serve_directory(self) -> Result {
         let serve_options = self.options.clone();
 
-        let server =
+        let mut server =
             HttpServer::new(move |request, response| -> ResponseResult {
                 eprintln!("Request: {} {}", request.method(), request.uri());
 
@@ -69,6 +69,7 @@ impl Server {
                 }
             });
 
+        server.dont_serve_static_files();
         server.listen(serve_options.host.as_str(), serve_options.port.as_str());
     }
 }
